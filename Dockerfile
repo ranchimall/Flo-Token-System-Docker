@@ -1,13 +1,10 @@
-# Getting base image ubuntu
-FROM python:3.9.0-slim
+FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 
-MAINTAINER shivam<mailbox.shivampandey@gmail.com>
+LABEL ranchimall="ranchimallfze@gmail.com"
 
 CMD { "echo", "Ranchi Mall" }
-
-FROM ubuntu:latest
 
 ## for apt to be noninteractive
 ENV DEBIAN_FRONTEND noninteractive
@@ -33,10 +30,10 @@ RUN git clone https://github.com/vivekteega/ftt-docker
 WORKDIR ftt-docker
 #RUN python3.9 -m venv ftt
 #RUN . ftt/bin/activate
-RUN pip3 install chardet
-RUN pip3 install arrow
-RUN pip3 install socketio
-RUN pip3 install requests
+RUN python3 -m pip install chardet
+RUN python3 -m pip install arrow
+RUN python3 -m pip install socketio
+RUN python3 -m pip install requests
 RUN sed -i "s|chardet==4.0.0|chardet|g" /ftt-docker/requirements.txt
 RUN touch config.ini
 RUN echo "[DEFAULT] \n\
