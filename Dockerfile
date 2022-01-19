@@ -28,6 +28,7 @@ WORKDIR ../
 
 # Setup of Flo Token Tracker
 RUN git clone https://github.com/vivekteega/ftt-docker
+RUN apt install python3.8-venv
 WORKDIR ftt-docker
 #RUN python3.9 -m venv ftt
 #RUN . ftt/bin/activate
@@ -35,6 +36,8 @@ RUN python3 -m pip install chardet
 RUN python3 -m pip install arrow
 RUN python3 -m pip install socketio
 RUN python3 -m pip install requests
+RUN python3 -m venv env
+RUN source env/bin/activate
 RUN sed -i "s|chardet==4.0.0|chardet|g" /ftt-docker/requirements.txt
 RUN touch config.ini
 RUN echo "[DEFAULT] \n\
@@ -52,6 +55,8 @@ RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \n\
 RUN git clone https://github.com/ranchimall/ranchimallflo-api
 WORKDIR ranchimallflo-api
 RUN python3 -m pip install --upgrade pip setuptools wheel
+RUN python3 -m venv env
+RUN source env/bin/activate
 RUN python3 -m pip install -r requirements.txt
 RUN pip3 install apscheduler
 RUN touch config.py
