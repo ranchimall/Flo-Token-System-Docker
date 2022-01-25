@@ -16,7 +16,8 @@ RUN apt-get -y install git
 RUN apt-get -y install python-chardet python3.9 python3.9-venv
 RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
 RUN apt-get install supervisor
-
+RUN echo_supervisord_conf
+RUN echo_supervisord_conf > /etc/supervisord.conf
 
 # Installation of Pybtc, currently named as Pyflo 
 WORKDIR ../
@@ -28,7 +29,7 @@ WORKDIR ../
 
 # Setup of Flo Token Tracker
 RUN git clone https://github.com/vivekteega/ftt-docker
-RUN apt install python3.8-venv
+RUN apt install python3.8-venv 
 WORKDIR ftt-docker
 #RUN python3.9 -m venv ftt
 #RUN . ftt/bin/activate
@@ -73,6 +74,13 @@ RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \n\
 # Supervisor configurations
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
+RUN touch supervisord.conf
+RUN echo "[supervisord] \n\
+    nodaemon=true\n\
+    [program:sshd]\n\
+    command=/usr/sbin/sshd -D\n\
+    [program:apache2]\n\
+    command=/bin/bash -c 'source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND' ">> supervisord.conf
 RUN touch ranchimallflo-api.conf
 RUN echo "[program:ranchimallflo-api]\n\
     directory=/ranchimallflo-api\n\
