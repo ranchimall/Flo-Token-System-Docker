@@ -1,12 +1,11 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
-SHELL ["/bin/bash", "-c"]
 
 LABEL ranchimall="ranchimallfze@gmail.com"
 
-CMD { "echo", "Ranchi Mall" }
+# CMD { "echo", "Ranchi Mall" }
 
-## for apt to be noninteractive
+# for apt to be noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
@@ -38,7 +37,6 @@ RUN python3 -m pip install arrow
 RUN python3 -m pip install socketio
 RUN python3 -m pip install requests
 RUN python3 -m venv env
-RUN source env/bin/activate
 RUN sed -i "s|chardet==4.0.0|chardet|g" /ftt-docker/requirements.txt
 RUN touch config.ini
 RUN echo "[DEFAULT] \n\
@@ -57,7 +55,6 @@ RUN git clone https://github.com/ranchimall/ranchimallflo-api
 WORKDIR ranchimallflo-api
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN python3 -m venv env
-RUN source env/bin/activate
 RUN python3 -m pip install -r requirements.txt
 RUN pip3 install apscheduler
 RUN touch config.py
@@ -72,33 +69,13 @@ RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \n\
 
 
 # Supervisor configurations
+## Flo token tracking configuration
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
-RUN touch supervisord.conf
+RUN touch ftt-ranchimallflo.conf
 RUN echo "[supervisord] \n\
     nodaemon=true\n\
-    [program:sshd]\n\
-    command=/usr/sbin/sshd -D\n\
-    [program:apache2]\n\
-    command=/bin/bash -c 'source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND' ">> supervisord.conf
-RUN touch ranchimallflo-api.conf
-RUN echo "[program:ranchimallflo-api]\n\
-    directory=/ranchimallflo-api\n\
-    command=/ranchimallflo-api/py3.7/bin/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\n\
-    user=root\n\
-    autostart=true\n\
-    autorestart=true\n\
-    stopasgroup=true\n\
-    killasgroup=true\n\
-    stderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \n\
-    stdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ranchimallflo-api.conf
-RUN mkdir /var/log/ranchimallflo-api/
-RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
-RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
-
-## Flo token tracking configuration
-RUN touch ftt.conf
-RUN echo "[program:ftt-docker]\n\
+    [program:ftt-docker]\n\
     directory=ftt-docker\n\
     command=tracktokens-smartcontracts.py\n\
     user=root\n\
@@ -107,10 +84,22 @@ RUN echo "[program:ftt-docker]\n\
     stopasgroup=true\n\
     killasgroup=true\n\
     stderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\n\
-    stdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log" >> ftt.conf
+    stdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n\
+    [program:ranchimallflo-api]\n\
+    directory=/ranchimallflo-api\n\
+    command=/ranchimallflo-api/env/bin/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\n\
+    user=root\n\
+    autostart=true\n\
+    autorestart=true\n\
+    stopasgroup=true\n\
+    killasgroup=true\n\
+    stderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \n\
+    stdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
+RUN mkdir /var/log/ranchimallflo-api/
+RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
+RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-# Run supervisor
 RUN service supervisor restart
