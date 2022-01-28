@@ -66,7 +66,19 @@ RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \n\
 
 
 # Setup of Floscout
+RUN git clone https://github.com/ranchimall/floscout.git
+WORKDIR floscout
+RUN git clone https://github.com/Dbhardwaj99/mongoose-server-files.git
+WORKDIR mongoose-server-files
+RUN mv example ~/floscout
+WORKDIR ../
+WORKDIR ../
 
+# setup of mongoose server
+# RUN git clone https://github.com/cesanta/mongoose.git
+# WORKDIR mongoose
+# RUN sudo simplest_web_server.c
+# WORKDIR ../
 
 # Supervisor configurations
 ## Flo token tracking configuration
