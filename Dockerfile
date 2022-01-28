@@ -1,5 +1,6 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
+EXPOSE 6200
 
 LABEL ranchimall="ranchimallfze@gmail.com"
 
