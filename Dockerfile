@@ -1,6 +1,7 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 EXPOSE 6200
+EXPOSE 5009
 
 LABEL ranchimall="ranchimallfze@gmail.com"
 
@@ -27,12 +28,11 @@ RUN apt-get install -y pkg-config
 RUN python3 setup.py install
 WORKDIR ../
 
+
 # Setup of Flo Token Tracker
 RUN git clone https://github.com/vivekteega/ftt-docker
 RUN apt install python3.8-venv 
 WORKDIR ftt-docker
-#RUN python3.9 -m venv ftt
-#RUN . ftt/bin/activate
 RUN python3 -m pip install chardet
 RUN python3 -m pip install arrow
 RUN python3 -m pip install socketio
@@ -52,6 +52,7 @@ RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \n\
 
 
 # Setup of RanchimallFlo API
+WORKDIR ../
 RUN git clone https://github.com/ranchimall/ranchimallflo-api
 WORKDIR ranchimallflo-api
 RUN python3 -m pip install --upgrade pip setuptools wheel
@@ -67,6 +68,7 @@ RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \n\
 
 
 # Setup of Floscout
+WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
 RUN git clone https://github.com/Dbhardwaj99/mongoose-server-files.git
