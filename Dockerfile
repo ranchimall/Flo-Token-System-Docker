@@ -16,7 +16,7 @@ RUN apt-get -y install python3-pip
 RUN apt-get -y install git
 RUN apt-get -y install python-chardet python3.9 python3.9-venv
 RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
-RUN apt-get install supervisor
+RUN python3 -m pip install supervisor
 RUN echo_supervisord_conf
 RUN echo_supervisord_conf > /etc/supervisord.conf
 
@@ -35,20 +35,16 @@ RUN apt install python3.8-venv
 WORKDIR ftt-docker
 RUN python3 -m pip install chardet
 RUN python3 -m pip install arrow
+RUN python3 -m pip install sqlalchemy
 RUN python3 -m pip install socketio
 RUN python3 -m pip install requests
 RUN python3 -m venv env
 RUN sed -i "s|chardet==4.0.0|chardet|g" /ftt-docker/requirements.txt
 RUN touch config.ini
-RUN echo "[DEFAULT] \n\
-    NET = testnet \n\
-    FLO_CLI_PATH = /usr/local/bin/flo-cli \n\
-    START_BLOCK = 740400" >> /ftt-docker/config.ini
+RUN echo "[DEFAULT] \nNET = testnet \nFLO_CLI_PATH = /usr/local/bin/flo-cli \nSTART_BLOCK = 740400" >> /ftt-docker/config.ini
 
 RUN touch config.py
-RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \n\
-    sseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \n\
-    privKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /ftt-docker/config.py
+RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /ftt-docker/config.py
 
 
 # Setup of RanchimallFlo API
@@ -60,11 +56,7 @@ RUN python3 -m venv env
 RUN python3 -m pip install -r requirements.txt
 RUN pip3 install apscheduler
 RUN touch config.py
-RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \n\
-    sse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \n\
-    apiUrl = 'https://flosight.duckdns.org/api/' \n\
-    apilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \n\
-    FLO_DATA_DIR = '/home/production/.flo' " >> /config.py
+RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \napiUrl = 'https://flosight.duckdns.org/api/' \napilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \nFLO_DATA_DIR = '/home/production/.flo' " >> /ranchimallflo-api/config.py
 
 
 # Setup of Floscout
@@ -80,7 +72,7 @@ WORKDIR ../
 # setup of mongoose server
 # RUN git clone https://github.com/cesanta/mongoose.git
 # WORKDIR mongoose
-# RUN sudo simplest_web_server.c
+# RUN simplest_web_server.c
 # WORKDIR ../
 
 # Supervisor configurations
@@ -88,28 +80,7 @@ WORKDIR ../
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
 RUN touch ftt-ranchimallflo.conf
-RUN echo "[supervisord] \n\
-    nodaemon=true\n\
-    [program:ftt-docker]\n\
-    directory=ftt-docker\n\
-    command=tracktokens-smartcontracts.py\n\
-    user=root\n\
-    autostart=true\n\
-    autorestart=true\n\
-    stopasgroup=true\n\
-    killasgroup=true\n\
-    stderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\n\
-    stdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n\
-    [program:ranchimallflo-api]\n\
-    directory=/ranchimallflo-api\n\
-    command=/ranchimallflo-api/env/bin/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\n\
-    user=root\n\
-    autostart=true\n\
-    autorestart=true\n\
-    stopasgroup=true\n\
-    killasgroup=true\n\
-    stderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \n\
-    stdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
+RUN echo "[supervisord] \nnodaemon=true\n[program:ftt-docker]\ndirectory=ftt-docker\ncommand=python3 tracktokens-smartcontracts.py\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=/ranchimallflo-api/env/bin/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
@@ -117,4 +88,15 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-RUN service supervisor restart
+# RUN service supervisor restart
+
+WORKDIR ../
+WORKDIR ../
+WORKDIR ../
+RUN touch run.sh
+RUN echo "#!/bin/bash\nexec python3 ftt-docker/tracktokens-smartcontracts.py" >> run.sh
+RUN chmod a+x run.sh
+# CMD ["./run.sh"]
+WORKDIR ranchimallflo-api
+# RUN hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app
+# RUN python3 tracktokens-smartcontracts.py
