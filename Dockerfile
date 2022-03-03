@@ -30,21 +30,21 @@ WORKDIR ../
 
 
 # Setup of Flo Token Tracker
-RUN git clone https://github.com/vivekteega/ftt-docker
+RUN git clone --branch token-swap https://github.com/ranchimall/flo-token-tracking.git 
 RUN apt install python3.8-venv 
-WORKDIR ftt-docker
+WORKDIR flo-token-tracking
 RUN python3 -m pip install chardet
 RUN python3 -m pip install arrow
 RUN python3 -m pip install sqlalchemy
 RUN python3 -m pip install socketio
 RUN python3 -m pip install requests
 RUN python3 -m venv env
-RUN sed -i "s|chardet==4.0.0|chardet|g" /ftt-docker/requirements.txt
+RUN sed -i "s|chardet==4.0.0|chardet|g" /flo-token-tracking/requirements.txt
 RUN touch config.ini
-RUN echo "[DEFAULT] \nNET = testnet \nFLO_CLI_PATH = /usr/local/bin/flo-cli \nSTART_BLOCK = 740400" >> /ftt-docker/config.ini
+RUN echo "[DEFAULT] \nNET = testnet \nFLO_CLI_PATH = /usr/local/bin/flo-cli \nSTART_BLOCK = 740400" >> /flo-token-tracking/config.ini
 
 RUN touch config.py
-RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /ftt-docker/config.py
+RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py
 
 
 # Setup of RanchimallFlo API
@@ -88,15 +88,4 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-# RUN service supervisor restart
-
-WORKDIR ../
-WORKDIR ../
-WORKDIR ../
-RUN touch run.sh
-RUN echo "#!/bin/bash\nexec python3 ftt-docker/tracktokens-smartcontracts.py" >> run.sh
-RUN chmod a+x run.sh
-# CMD ["./run.sh"]
-WORKDIR ranchimallflo-api
-# RUN hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app
-# RUN python3 tracktokens-smartcontracts.py
+RUN service supervisor restart
