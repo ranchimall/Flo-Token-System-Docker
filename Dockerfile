@@ -80,7 +80,7 @@ WORKDIR ../
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
 RUN touch ftt-ranchimallflo.conf
-RUN echo "[supervisord] \nnodaemon=true\n[program:ftt-docker]\ndirectory=ftt-docker\ncommand=python3 tracktokens-smartcontracts.py\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=/ranchimallflo-api/env/bin/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
+RUN echo "[supervisord] \nnodaemon=true\n[program:ftt-docker]\ndirectory=ftt-docker\ncommand=python3 tracktokens-smartcontracts.py\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=/ranchimallflo-api/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
@@ -88,4 +88,4 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-RUN service supervisor restart
+RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
