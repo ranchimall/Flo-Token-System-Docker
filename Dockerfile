@@ -88,4 +88,4 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
+#RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
