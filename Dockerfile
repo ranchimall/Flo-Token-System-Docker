@@ -41,7 +41,7 @@ RUN python3 -m pip install requests
 RUN python3 -m venv env
 RUN sed -i "s|chardet==4.0.0|chardet|g" /flo-token-tracking/requirements.txt
 RUN touch config.ini
-RUN echo "[DEFAULT] \nNET = testnet \nFLO_CLI_PATH = /usr/local/bin/flo-cli \nSTART_BLOCK = 740400" >> /flo-token-tracking/config.ini
+RUN echo "[DEFAULT]\nNET = testnet\nFLO_CLI_PATH = /usr/local/bin/flo-cli\nSTART_BLOCK = 740400\nFLOSIGHT_NETURL = http://0.0.0.0:9000/\nTESTNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9000/, https://testnet-flosight.duckdns.org/\nMAINNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9495/, https://flosight.duckdns.org/\nTOKENAPI_SSE_URL = https://ranchimallflo-testnet.duckdns.org\nIGNORE_BLOCK_LIST = 902446\nIGNORE_TRANSACTION_LIST = b4ac4ddb51188b28b39bcb3aa31357d5bfe562c21e8aaf8dde0ec560fc893174" >> /flo-token-tracking/config.ini
 
 RUN touch config.py
 RUN echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py
@@ -80,7 +80,7 @@ WORKDIR ../
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
 RUN touch ftt-ranchimallflo.conf
-RUN echo "[supervisord] \nnodaemon=true\n[program:ftt-docker]\ndirectory=ftt-docker\ncommand=python3 tracktokens-smartcontracts.py\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=/ranchimallflo-api/hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
+RUN echo "[supervisord] \nnodaemon=true\n[program:flo-token-tracking]\ndirectory=/flo-token-tracking\ncommand=python3 tracktokens_smartcontracts.py --reset\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
@@ -88,4 +88,4 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
-RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
+# RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
