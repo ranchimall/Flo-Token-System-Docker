@@ -56,7 +56,7 @@ RUN python3 -m venv env
 RUN python3 -m pip install -r requirements.txt
 RUN pip3 install apscheduler
 RUN touch config.py
-RUN echo "dbfolder = '/home/production/dev/shivam/ranchimallflo-api' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \napiUrl = 'https://flosight.duckdns.org/api/' \napilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \nFLO_DATA_DIR = '/home/production/.flo' " >> /ranchimallflo-api/config.py
+RUN echo "dbfolder = '/home/production/dev/ranchimallflo-api' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \napiUrl = 'https://flosight.duckdns.org/api/' \napilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \nFLO_DATA_DIR = '/home/production/.flo' " >> /ranchimallflo-api/config.py
 
 
 # Setup of Floscout
