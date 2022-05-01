@@ -69,11 +69,11 @@ RUN mv example ~/floscout
 WORKDIR ../
 WORKDIR ../
 
- setup of mongoose server
- RUN git clone https://github.com/cesanta/mongoose.git
- WORKDIR mongoose
- RUN simplest_web_server.c
- WORKDIR ../
+# setup of mongoose server
+RUN git clone https://github.com/cesanta/mongoose.git
+WORKDIR mongoose
+RUN simplest_web_server.c
+WORKDIR ../
 
 # Supervisor configurations
 ## Flo token tracking configuration
