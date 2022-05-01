@@ -69,11 +69,11 @@ RUN mv example ~/floscout
 WORKDIR ../
 WORKDIR ../
 
-# setup of mongoose server
-# RUN git clone https://github.com/cesanta/mongoose.git
-# WORKDIR mongoose
-# RUN simplest_web_server.c
-# WORKDIR ../
+ setup of mongoose server
+ RUN git clone https://github.com/cesanta/mongoose.git
+ WORKDIR mongoose
+ RUN simplest_web_server.c
+ WORKDIR ../
 
 # Supervisor configurations
 ## Flo token tracking configuration
@@ -88,4 +88,7 @@ RUN mkdir /var/log/ranchimallflo-api/
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.err.log
 RUN touch /var/log/ranchimallflo-api/ranchimallflo-api.out.log
 
+COPY run.sh .
+RUN chmod +x run.sh
+CMD ["/etc/supervisor/conf.d/run.sh"]
 # RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf

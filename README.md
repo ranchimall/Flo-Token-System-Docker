@@ -13,8 +13,21 @@ RanchiMall wants to made things easy for you by packing all the three systems to
 
 ## How do I use this?
 
-Clone the repository and then run 
+Clone the repository and then crete a docker volume
+
+```
+docker volume inspect ranchimall-flo-volume
+```
+
+Build the docker image by the following command
 
 ```
 sudo docker build .
 ```
+
+Run the docker container with exposing all the port and mounting the volume
+
+```
+docker run -d -p 5009:5009 6200:6200 -v ranchimall-flo-volume 147fcf811419
+```
+
