@@ -63,16 +63,17 @@ RUN echo "dbfolder = '/home/production/dev/ranchimallflo-api' \nsse_pubKey = '02
 WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
-RUN git clone https://github.com/Dbhardwaj99/mongoose-server-files.git
-WORKDIR mongoose-server-files
-RUN mv example ~/floscout
+RUN git clone https://github.com/cesanta/mongoose
+WORKDIR mongoose/examples/http-server
+RUN make example
+RUN mv example /floscout
 WORKDIR ../
 WORKDIR ../
 
 ## setup of mongoose server
 #RUN git clone https://github.com/cesanta/mongoose.git
 #WORKDIR mongoose
-##RUN simplest_web_server.c
+#RUN simplest_web_server.c
 #WORKDIR ../
 
 # Supervisor configurations
