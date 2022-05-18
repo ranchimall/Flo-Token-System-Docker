@@ -63,6 +63,7 @@ RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
 COPY example .
 COPY mongoose.sh .
+RUN chmod +x mongoose.sh
 WORKDIR ../
 
 # Supervisor configurations
