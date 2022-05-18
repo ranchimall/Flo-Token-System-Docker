@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /floscout
 
-echo "mongoose server is up..."
+echo "mongoose server is up...."
 ./example
