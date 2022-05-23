@@ -62,8 +62,8 @@ WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
 COPY example .
-COPY mongoose.sh .
-RUN chmod +x mongoose.sh
+#COPY mongoose.sh .
+#RUN chmod +x mongoose.sh
 WORKDIR ../
 
 # Supervisor configurations
@@ -84,5 +84,5 @@ RUN touch /var/log/floscout/floscout.out.log
 
 COPY run.sh .
 RUN chmod +x run.sh
-CMD ["/etc/supervisor/conf.d/run.sh"]
+#CMD ["/etc/supervisor/conf.d/run.sh"]
 # RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
