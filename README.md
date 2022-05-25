@@ -28,6 +28,6 @@ sudo docker build .
 Run the docker container with exposing all the port and mounting the volume
 
 ```
-docker run -d -p 5009:5009 6200:6200 -v ranchimall-flo-volume 147fcf811419
+docker run -d -p 5009:5009 -p 6200:6200 -v ranchimall-flo-volume <IMAGE-ID>
 ```
 

@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
-EXPOSE 8000
+EXPOSE 6200
 EXPOSE 5009
 
 LABEL ranchimall="ranchimallfze@gmail.com"
@@ -62,8 +62,6 @@ WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
 COPY example .
-#COPY mongoose.sh .
-#RUN chmod +x mongoose.sh
 WORKDIR ../
 
 # Supervisor configurations
@@ -84,5 +82,4 @@ RUN touch /var/log/floscout/floscout.out.log
 
 COPY run.sh .
 RUN chmod +x run.sh
-#CMD ["/etc/supervisor/conf.d/run.sh"]
-# RUN supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
+CMD ["/etc/supervisor/conf.d/run.sh"]
