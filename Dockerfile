@@ -1,8 +1,7 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
-EXPOSE 6200
-EXPOSE 5009
-EXPOSE 6900
+EXPOSE 4256
+EXPOSE 6012
 
 LABEL ranchimall="ranchimallfze@gmail.com"
 
@@ -73,7 +72,7 @@ WORKDIR ../
 ## Ranchimallflo configuration
 WORKDIR /etc/supervisor/conf.d/
 RUN touch ftt-ranchimallflo.conf
-RUN echo "[supervisord] \nnodaemon=true\n[program:flo-token-tracking]\ndirectory=/flo-token-tracking\ncommand=python3 tracktokens_smartcontracts.py --reset\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=hypercorn -w 1 -b 0.0.0.0:5009 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log\n[program:floscout]\ndirectory=/floscout\ncommand=/floscout/example\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/floscout/floscout.err.log\nstdout_logfile=/var/log/floscout/floscout.out.log" >> ftt-ranchimallflo.conf
+RUN echo "[supervisord] \nnodaemon=true\n[program:flo-token-tracking]\ndirectory=/flo-token-tracking\ncommand=python3 tracktokens_smartcontracts.py --reset\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=hypercorn -w 1 -b 0.0.0.0:6012 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log\n[program:floscout]\ndirectory=/floscout\ncommand=/floscout/example\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/floscout/floscout.err.log\nstdout_logfile=/var/log/floscout/floscout.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
