@@ -31,3 +31,8 @@ Run the docker container with exposing all the port and mounting the volume
 docker run -d -p 5009:5009 -p 6200:6200 -v ranchimall-flo-volume <IMAGE-ID>
 ```
 
+To Check if FLO-API is running
+
+```
+0.0.0.0:5009/api/v1.0/getSystemData
+```

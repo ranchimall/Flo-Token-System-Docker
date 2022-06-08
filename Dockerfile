@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 EXPOSE 6200
 EXPOSE 5009
+EXPOSE 6900
 
 LABEL ranchimall="ranchimallfze@gmail.com"
 
@@ -11,6 +12,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 RUN apt-get update
 RUN apt-get -y install python3-pip
+RUN apt-get -y install nano
 RUN apt-get -y install git
 RUN apt-get -y install python-chardet python3.9 python3.9-venv
 RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
@@ -54,13 +56,15 @@ RUN python3 -m venv env
 RUN python3 -m pip install -r requirements.txt
 RUN pip3 install apscheduler
 RUN touch config.py
-RUN echo "dbfolder = '/home/production/dev/ranchimallflo-api' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \napiUrl = 'https://flosight.duckdns.org/api/' \napilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \nFLO_DATA_DIR = '/home/production/.flo' " >> /ranchimallflo-api/config.py
+RUN echo "dbfolder = '/flo-token-tracking' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b8b83cd3b2ffcc7c763ceb9e85caabcf' \napiUrl = 'https://flosight.duckdns.org/api/' \napilayerAccesskey = '3abc51aa522420e4e185ac22733b0f30' \nFLO_DATA_DIR = '/home/production/.flo' " >> /ranchimallflo-api/config.py
 
 
 # Setup of Floscout
 WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
+RUN rm index.html
+COPY index.html .
 COPY example .
 WORKDIR ../
 
