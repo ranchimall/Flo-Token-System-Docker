@@ -13,8 +13,26 @@ RanchiMall wants to made things easy for you by packing all the three systems to
 
 ## How do I use this?
 
-Clone the repository and then run 
+Clone the repository and build the docker image by the following command
 
 ```
 sudo docker build .
+```
+
+Run the docker container with exposing all the port and mounting the volume
+
+```
+docker run -d -p 6012:6012 -p 4256:6200 <IMAGE-ID>
+```
+
+To Check if FLO-API is running
+
+```
+http://0.0.0.0:5009/api/v1.0/getSystemData
+```
+
+To Check if FLOSCOUT is running
+
+```
+http://0.0.0.0:4256
 ```
