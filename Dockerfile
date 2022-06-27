@@ -2,8 +2,6 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 EXPOSE 6200
 EXPOSE 6012
-ARG net
-
 LABEL ranchimall="ranchimallfze@gmail.com"
 
 # for apt to be noninteractive
@@ -44,8 +42,8 @@ RUN touch config.ini
 RUN touch config.py
 
 
-RUN if [[ $net=='test' ]] ; then echo "[DEFAULT]\nNET = testnet\nFLO_CLI_PATH = /usr/local/bin/flo-cli\nSTART_BLOCK = 740400\nFLOSIGHT_NETURL = http://0.0.0.0:9000/\nTESTNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9000/, https://testnet-flosight.duckdns.org/\nMAINNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9495/, https://flosight.duckdns.org/\nTOKENAPI_SSE_URL = https://ranchimallflo-testnet.duckdns.org\nIGNORE_BLOCK_LIST = 902446\nIGNORE_TRANSACTION_LIST = b4ac4ddb51188b28b39bcb3aa31357d5bfe562c21e8aaf8dde0ec560fc893174" >> /flo-token-tracking/config.ini ; else echo "[DEFAULT]\nNET = testnet\nFLO_CLI_PATH = /usr/local/bin/flo-cli\nSTART_BLOCK = 740400\nFLOSIGHT_NETURL = http://0.0.0.0:9000/\nTESTNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9000/, https://testnet-flosight.duckdns.org/\nMAINNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9495/, https://flosight.duckdns.org/\nTOKENAPI_SSE_URL = https://ranchimallflo-testnet.duckdns.org\nIGNORE_BLOCK_LIST = 902446\nIGNORE_TRANSACTION_LIST = b4ac4ddb51188b28b39bcb3aa31357d5bfe562c21e8aaf8dde0ec560fc893174" >> /flo-token-tracking/config.ini ; fi
-RUN if [[ $net=='test' ]] ; then echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py ; else echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py ; fi
+RUN if [[ $NETWROKK=='test' ]] ; then echo "[DEFAULT]\nNET = testnet\nFLO_CLI_PATH = /usr/local/bin/flo-cli\nSTART_BLOCK = 740400\nFLOSIGHT_NETURL = http://0.0.0.0:9000/\nTESTNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9000/, https://testnet-flosight.duckdns.org/\nMAINNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9495/, https://flosight.duckdns.org/\nTOKENAPI_SSE_URL = https://ranchimallflo-testnet.duckdns.org\nIGNORE_BLOCK_LIST = 902446\nIGNORE_TRANSACTION_LIST = b4ac4ddb51188b28b39bcb3aa31357d5bfe562c21e8aaf8dde0ec560fc893174" >> /flo-token-tracking/config.ini ; else echo "[DEFAULT]\nNET = testnet\nFLO_CLI_PATH = /usr/local/bin/flo-cli\nSTART_BLOCK = 740400\nFLOSIGHT_NETURL = http://0.0.0.0:9000/\nTESTNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9000/, https://testnet-flosight.duckdns.org/\nMAINNET_FLOSIGHT_SERVER_LIST = http://0.0.0.0:9495/, https://flosight.duckdns.org/\nTOKENAPI_SSE_URL = https://ranchimallflo-testnet.duckdns.org\nIGNORE_BLOCK_LIST = 902446\nIGNORE_TRANSACTION_LIST = b4ac4ddb51188b28b39bcb3aa31357d5bfe562c21e8aaf8dde0ec560fc893174" >> /flo-token-tracking/config.ini ; fi
+RUN if [[ $NETWROKK=='test' ]] ; then echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py ; else echo "committeeAddressList = ['oVwmQnQGtXjRpP7dxJeiRGd5azCrJiB6Ka'] \nsseAPI_url = 'https://ranchimallflo-testnet.duckdns.org/' \nprivKey = 'RG6Dni1fLqeT2TEFbe7RB9tuw53bDPDXp8L4KuvmYkd5JGBam6KJ' " >> /flo-token-tracking/config.py ; fi
 
 # Setup of RanchimallFlo API
 WORKDIR ../
@@ -90,4 +88,4 @@ RUN touch /var/log/floscout/floscout.out.log
 
 COPY run.sh .
 RUN chmod +x run.sh
-#CMD ["/etc/supervisor/conf.d/run.sh"]
+CMD ["/etc/supervisor/conf.d/run.sh"]
