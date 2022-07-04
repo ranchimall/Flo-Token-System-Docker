@@ -15,8 +15,6 @@ RUN apt-get -y install git
 RUN apt-get -y install python-chardet python3.9 python3.9-venv
 RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
 RUN python3 -m pip install supervisor
-RUN echo_supervisord_conf
-RUN echo_supervisord_conf > /etc/supervisord.conf
 
 # Installation of Pybtc, currently named as Pyflo 
 WORKDIR ../
@@ -61,8 +59,6 @@ RUN echo "dbfolder = '/flo-token-tracking' \nsse_pubKey = '02b68a7ba52a499b4cb66
 WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
-RUN rm index.html
-COPY index.html .
 COPY example .
 RUN sed -i "s|window.tokenapiUrl = 'http://0.0.0.0:6012'|window.tokenapiUrl = $FLOAPIURL|" /floscout/index.html
 WORKDIR ../
@@ -86,6 +82,7 @@ RUN mkdir /var/log/floscout/
 RUN touch /var/log/floscout/floscout.err.log
 RUN touch /var/log/floscout/floscout.out.log
 
+WORKDIR /
 COPY run.sh .
 RUN chmod +x run.sh
-CMD ["/etc/supervisor/conf.d/run.sh"]
+ENTRYPOINT ["sh","/run.sh"]
