@@ -19,10 +19,16 @@ Clone the repository and build the docker image by the following command
 sudo docker build .
 ```
 
+Crete a docker volume
+
+```
+docker volume inspect ranchimall-flo-volume
+```
+
 Run the docker container with exposing all the port and mounting the volume
 
 ```
-docker run -d -p 6012:6012 -p 4256:6200 <IMAGE-ID>
+docker run -it -p 3023:3023 -p 6200:6200 -p 6012:6012 -v ranchimall-flo-volume --env NETWORKK='test' --env FLOAPIURL="0.0.0.0:3023" <IMAGE-ID>
 ```
 
 To Check if FLO-API is running
