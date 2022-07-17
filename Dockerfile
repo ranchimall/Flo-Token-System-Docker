@@ -82,6 +82,8 @@ RUN mkdir /var/log/floscout/
 RUN touch /var/log/floscout/floscout.err.log
 RUN touch /var/log/floscout/floscout.out.log
 
+
+RUN mkdir /data 
 WORKDIR /
 COPY run.sh .
 RUN chmod +x run.sh
