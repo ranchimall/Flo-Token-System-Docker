@@ -59,3 +59,27 @@ docker run -d --name=floscout \
 docker logs -f floscout
 
 ```
+
+## FLOSCOUT BOOTSTRAP CODE (To be removed after code is incorporated)
+
+```
+if [ ! -z "$FLOSCOUT_BOOTSTRAP" ] && [ "$(cat /data/floscout-url.txt)" != "$FLOSCOUT_BOOTSTRAP" ]
+then
+  # download and extract Floscout boostrap
+  echo 'Downloading FLOSCOUT Bootstrap...'
+  RUNTIME="$(date +%s)"
+  curl -L $FLOSCOUT_BOOTSTRAP -o /data/data.zip --progress-bar | tee /dev/null
+  RUNTIME="$(($(date +%s)-RUNTIME))"
+  echo "FLOSCOUT BOOTSTRAP Download Complete (took ${RUNTIME} seconds)"
+  echo 'Extracting Bootstrap...'
+  RUNTIME="$(date +%s)"
+  upzip /data/data.zip -d /data
+  RUNTIME="$(($(date +%s)-RUNTIME))"
+  echo "FLOSCOUT Bootstrap Extraction Complete! (took ${RUNTIME} seconds)"
+  rm -f /data/data.zip
+  echo 'Erased Bootstrap `.zip` file'
+  echo "$FLOSCOUT_BOOTSTRAP" > /data/floscout-url.txt
+  ls /data
+fi
+```
+
