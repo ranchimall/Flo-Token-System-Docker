@@ -9,34 +9,21 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 RUN apt-get update
-RUN apt-get -y install python3-pip
-RUN apt-get -y install nano
-RUN apt-get -y install git
-RUN apt-get -y install python-chardet python3.9 python3.9-venv
-RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
+RUN apt-get -y install python3-pip nano git curl python-chardet python3.9 python3.9-venv python3.8-venv unzip 
+RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev pkg-config
 RUN python3 -m pip install supervisor
-RUN api-get -y install unzip
 
 # Installation of Pybtc, currently named as Pyflo 
 WORKDIR ../
 RUN git clone https://github.com/ranchimall/pyflo
-WORKDIR pyflo
-RUN apt-get install -y pkg-config
-RUN python3 setup.py install
-WORKDIR ../
-
+RUN cd pyflo && python3 setup.py install
 
 # Setup of Flo Token Tracker
 RUN git clone --branch token-swap https://github.com/ranchimall/flo-token-tracking.git 
-RUN apt install python3.8-venv 
 WORKDIR flo-token-tracking
-RUN python3 -m pip install chardet
-RUN python3 -m pip install arrow
-RUN python3 -m pip install sqlalchemy
-RUN python3 -m pip install socketio
-RUN python3 -m pip install requests
-RUN python3 -m venv env
 RUN sed -i "s|chardet==4.0.0|chardet|g" /flo-token-tracking/requirements.txt
+RUN python3 -m venv env
+RUN python3 -m pip install chardet arrow sqlalchemy python-socketio requests
 RUN touch config.ini
 RUN touch config.py
 
@@ -72,7 +59,7 @@ WORKDIR ../
 # Supervisor configurations
 WORKDIR /etc/supervisor/conf.d/
 RUN touch ftt-ranchimallflo.conf
-RUN echo "[supervisord] \nnodaemon=true\n[program:flo-token-tracking]\ndirectory=/flo-token-tracking\ncommand=python3 tracktokens_smartcontracts.py --reset\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=hypercorn -w 1 -b 0.0.0.0:6012 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log\n[program:floscout]\ndirectory=/floscout\ncommand=/floscout/example\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/floscout/floscout.err.log\nstdout_logfile=/var/log/floscout/floscout.out.log" >> ftt-ranchimallflo.conf
+RUN echo "[supervisord] \nnodaemon=true\n[program:flo-token-tracking]\ndirectory=/flo-token-tracking\ncommand=/usr/bin/python3 tracktokens_smartcontracts.py\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/flo-token-tracking/flo-token-tracking.err.log\nstdout_logfile=/var/log/flo-token-tracking/flo-token-tracking.out.log\n[program:ranchimallflo-api]\ndirectory=/ranchimallflo-api\ncommand=/usr/local/bin/hypercorn -w 1 -b 0.0.0.0:6012 wsgi:app\nuser=root\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.err.log \nstdout_logfile=/var/log/ranchimallflo-api/ranchimallflo-api.out.log\n[program:floscout]\ndirectory=/floscout\ncommand=/floscout/example\nuser=root\nautostart=true\nautorestart=false\nstopasgroup=true\nkillasgroup=true\nstderr_logfile=/var/log/floscout/floscout.err.log\nstdout_logfile=/var/log/floscout/floscout.out.log" >> ftt-ranchimallflo.conf
 RUN mkdir /var/log/flo-token-tracking
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.err.log
 RUN touch /var/log/flo-token-tracking/flo-token-tracking.out.log
