@@ -14,7 +14,7 @@ then
   echo "FLOSCOUT BOOTSTRAP Download Complete (took ${RUNTIME} seconds)"
   echo 'Extracting Bootstrap...'
   RUNTIME="$(date +%s)"
-  upzip /data/data.zip -d /data
+  unzip /data/data.zip -d /data
   RUNTIME="$(($(date +%s)-RUNTIME))"
   echo "FLOSCOUT Bootstrap Extraction Complete! (took ${RUNTIME} seconds)"
   rm -f /data/data.zip
@@ -24,5 +24,5 @@ then
 fi
 
 echo "running..."
-#supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
-#./floscout/example
+supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
+./floscout/example

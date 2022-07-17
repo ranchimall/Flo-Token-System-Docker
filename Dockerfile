@@ -15,6 +15,7 @@ RUN apt-get -y install git
 RUN apt-get -y install python-chardet python3.9 python3.9-venv
 RUN apt-get -y install libsecp256k1-dev libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev libyaml-cpp-dev
 RUN python3 -m pip install supervisor
+RUN api-get -y install unzip
 
 # Installation of Pybtc, currently named as Pyflo 
 WORKDIR ../
