@@ -6,8 +6,8 @@ VCFLAGS = /nologo /W3 /O2 /I../.. $(DEFS) $(EXTRA) /link /incremental:no /machin
 VC98 = docker run -it --rm -e Tmp=. -v $(ROOT):$(ROOT) -w $(CURDIR) mdashnet/vc98
 LIN = docker run -it --rm -v $(ROOT):$(ROOT) -w $(CURDIR) mdashnet/cc2
 
-all: $(PROG)
-	$(RUN) ./$(PROG) $(ARGS)
+#all: $(PROG)
+#	$(RUN) ./$(PROG) $(ARGS)
 
 $(PROG): main.c Makefile
 	$(CC) ../../mongoose.c main.c -I../.. $(CFLAGS) -o $@

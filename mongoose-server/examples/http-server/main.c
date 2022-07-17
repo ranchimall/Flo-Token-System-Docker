@@ -6,7 +6,7 @@
 
 static const char *s_debug_level = "2";
 static const char *s_root_dir = ".";
-static const char *s_listening_address = "http://0.0.0.0:6201";
+static const char *s_listening_address = "http://0.0.0.0:6012";
 static const char *s_enable_hexdump = "no";
 static const char *s_ssi_pattern = "#.html";
 

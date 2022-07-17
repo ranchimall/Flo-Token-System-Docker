@@ -47,7 +47,6 @@ RUN echo "dbfolder = '/data' \nsse_pubKey = '02b68a7ba52a499b4cb664033f511a14b0b
 WORKDIR ../
 RUN git clone https://github.com/ranchimall/floscout.git
 WORKDIR floscout
-COPY example .
 RUN sed -i "s|window.tokenapiUrl = 'http://0.0.0.0:6012'|window.tokenapiUrl = $FLOAPIURL|" /floscout/index.html
 WORKDIR ../
 
@@ -73,6 +72,7 @@ RUN touch /var/log/floscout/floscout.out.log
 
 RUN mkdir /data 
 WORKDIR /
+COPY mongoose-server
 COPY run.sh .
 RUN chmod +x run.sh
 ENTRYPOINT ["sh","/run.sh"]

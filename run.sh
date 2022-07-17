@@ -23,6 +23,12 @@ then
   ls /data
 fi
 
+# prepare binary 
+cd /mongoose-server/examples/http-server
+make 
+chmod +x example
+cp example /floscout
+
 echo "running..."
 supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
 ./floscout/example
