@@ -42,3 +42,20 @@ To Check if FLOSCOUT is running
 ```
 http://0.0.0.0:4256
 ```
+
+## Development of the docker commands for regular Floscout on Docker
+
+```
+
+docker volume create floscout
+
+docker run -d --name=floscout \
+    -p 3023:3023 -p 6200:6200 -p 6012:6012 \
+    -v floscout:/data \
+    -e NETWORK=mainnet \
+    -e FLOSCOUT_BOOTSTRAP=https://ranchimallflo.duckdns.org/api/v1.0/floscout-bootstrap \
+    ranchimallfze/floscout
+
+docker logs -f floscout
+
+```
