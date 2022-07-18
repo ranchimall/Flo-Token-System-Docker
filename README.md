@@ -53,7 +53,7 @@ docker run -d --name=floscout \
     -p 6200:6200 -p 6012:6012 \
     -v floscout:/data \
     -e NETWORK=mainnet \
-    -e FLOSCOUT_BOOTSTRAP=https://ranchimallflo.duckdns.org/api/v1.0/floscout-bootstrap \
+    -e FLOSCOUT_BOOTSTRAP=http://ranchimall-stevejobs.duckdns.org:3847/data.zip \
     ranchimallfze/floscout:1.0.0
 
 docker logs -f floscout
