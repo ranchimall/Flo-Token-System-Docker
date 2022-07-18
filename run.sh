@@ -1,8 +1,10 @@
 #!/bin/bash
-cd /etc/supervisor/conf.d/
 
-sed -i "s|command=hypercorn -w 1 -b 0.0.0.0:6012 wsgi:app|command=hypercorn -w 1 -b $FLOAPIURL wsgi:app|" /etc/supervisor/conf.d/ftt-ranchimallflo.conf
-sed -i "s|window.tokenapiUrl = 'https://ranchimallflo.duckdns.org'|window.tokenapiUrl = '$FLOAPIURL'|" /floscout/index.html
+# prepare binary 
+cd /mongoose-server/examples/http-server
+make 
+chmod +x example
+cp example /floscout
 
 if [ ! -z "$FLOSCOUT_BOOTSTRAP" ] && [ "$(cat /data/floscout-url.txt)" != "$FLOSCOUT_BOOTSTRAP" ]
 then
@@ -23,12 +25,11 @@ then
   ls /data
 fi
 
-# prepare binary 
-cd /mongoose-server/examples/http-server
-make 
-chmod +x example
-cp example /floscout
+cd /etc/supervisor/conf.d/
+sed -i "s|command=hypercorn -w 1 -b 0.0.0.0:6012 wsgi:app|command=hypercorn -w 1 -b $FLOAPIURL wsgi:app|" /etc/supervisor/conf.d/ftt-ranchimallflo.conf
+sed -i "s|window.tokenapiUrl = 'https://ranchimallflo.duckdns.org'|window.tokenapiUrl = '$FLOAPIURL'|" /floscout/index.html
 
 echo "running..."
 supervisord -c /etc/supervisor/conf.d/ftt-ranchimallflo.conf
-./floscout/example
+cd /floscout
+./example

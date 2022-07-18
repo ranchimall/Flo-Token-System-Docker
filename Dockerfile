@@ -72,7 +72,8 @@ RUN touch /var/log/floscout/floscout.out.log
 
 RUN mkdir /data 
 WORKDIR /
-COPY mongoose-server
+RUN mkdir mongoose-server
+COPY mongoose-server/ /mongoose-server
 COPY run.sh .
 RUN chmod +x run.sh
 ENTRYPOINT ["sh","/run.sh"]
