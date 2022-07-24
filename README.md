@@ -2,7 +2,7 @@
 
 Docker resources to build components required for FLO Token-Smart Contract system, all at one place! 
 
-## Why do I need this?
+## Why do I need this? 
 
 FLO Token-Smart Contract system consists of three apps working together 
 * FLO Token & Smart Contract tracking scripts (Python)
@@ -82,4 +82,3 @@ then
   ls /data
 fi
 ```
-
